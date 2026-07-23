@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+﻿/*using HarmonyLib;
 using JojaCareer.Data;
 using JojaCareer.Dialogues;
 using StardewModdingAPI;
@@ -6,7 +6,10 @@ using StardewValley;
 
 namespace JojaCareer.Patches;
 
-[HarmonyPatch(typeof(NPC), nameof(NPC.checkAction))]
+[HarmonyPatch(
+    typeof(NPC),
+    nameof(NPC.checkAction)
+)]
 internal static class NPCInteractionPatch
 {
     public static bool Prefix(
@@ -20,7 +23,10 @@ internal static class NPCInteractionPatch
             LogLevel.Info
         );
 
-        if (__instance.Name != "Morris")
+        if (
+            __instance.Name !=
+            "Morris"
+        )
         {
             return true;
         }
@@ -36,8 +42,21 @@ internal static class NPCInteractionPatch
         )
         {
             MorrisInterview.Start(
-                __instance,
-                who
+                __instance
+            );
+
+            return false;
+        }
+
+        if (
+            PlayerData.State ==
+            PlayerState.Employee
+            &&
+            !PlayerData.IsOnShift
+        )
+        {
+            MorrisShiftDialogue.Start(
+                __instance
             );
 
             return false;
@@ -49,7 +68,9 @@ internal static class NPCInteractionPatch
                 "Greeting"
             );
 
-        if (dialogue is null)
+        if (
+            dialogue is null
+        )
         {
             ModEntry.ModMonitor.Log(
                 "Could not create Morris dialogue.",
@@ -65,8 +86,10 @@ internal static class NPCInteractionPatch
             dialogue
         );
 
-        Game1.drawDialogue(__instance);
+        Game1.drawDialogue(
+            __instance
+        );
 
         return false;
     }
-}
+}*/

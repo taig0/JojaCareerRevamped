@@ -36,4 +36,53 @@ internal static class PlayerData
             ] = value.ToString();
         }
     }
+
+    public static ShiftState ShiftState
+    {
+        get
+        {
+            if (
+                !Game1.player.modData.TryGetValue(
+                    "JojaCareer_ShiftState",
+                    out string? value
+                )
+            )
+            {
+                return ShiftState.OffShift;
+            }
+
+            return Enum.Parse<ShiftState>(
+                value
+            );
+        }
+
+        set
+        {
+            Game1.player.modData[
+                "JojaCareer_ShiftState"
+            ] = value.ToString();
+        }
+    }
+
+    public static bool IsOnShift
+    {
+        get
+        {
+            return Game1.player.modData.TryGetValue(
+                "JojaCareer_IsOnShift",
+                out string? value
+            )
+            &&
+            value == "true";
+        }
+
+        set
+        {
+            Game1.player.modData[
+                "JojaCareer_IsOnShift"
+            ] =
+                value.ToString()
+                    .ToLower();
+        }
+    }
 }

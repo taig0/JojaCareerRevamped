@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
+using JojaCareer.Data;
 using JojaCareer.Dialogues;
 using JojaCareer.NPCs;
 using JojaCareer.Quests;
+using JojaCareer.Shifts;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -54,6 +56,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.DayStarted += OnDayStarted;
         helper.Events.Display.MenuChanged += OnMenuChanged;
+        helper.Events.Player.Warped += OnPlayerWarped;
     }
 
     private void OnSaveLoaded(
@@ -105,5 +108,40 @@ internal sealed class ModEntry : Mod
 
             QuestManager.CheckMail();
         }
+    }
+
+    private void OnPlayerWarped(
+    object? sender,
+    WarpedEventArgs e
+)
+    {
+        if (
+            !e.IsLocalPlayer
+        )
+        {
+            return;
+        }
+
+        if (
+            e.OldLocation.Name !=
+            "JojaMart"
+        )
+        {
+            return;
+        }
+
+        if (
+            !PlayerData.IsOnShift
+        )
+        {
+            return;
+        }
+
+        ShiftManager.EndShift();
+
+        ModMonitor.Log(
+            "Player left JojaMart. Shift ended.",
+            LogLevel.Info
+        );
     }
 }

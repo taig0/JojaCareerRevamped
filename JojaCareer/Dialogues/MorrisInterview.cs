@@ -1,5 +1,6 @@
 ﻿using JojaCareer.Data;
 using JojaCareer.Quests;
+using JojaCareer.Player;
 using StardewValley;
 
 namespace JojaCareer.Dialogues;
@@ -7,8 +8,7 @@ namespace JojaCareer.Dialogues;
 internal static class MorrisInterview
 {
     public static void Start(
-        NPC morris,
-        Farmer player
+        NPC morris
     )
     {
         string? question =
@@ -39,47 +39,101 @@ internal static class MorrisInterview
             question,
             new Response[]
             {
-        new Response(
-            "InterviewYes",
-            yes
-        ),
+                new Response(
+                    "InterviewYes",
+                    yes
+                ),
 
-        new Response(
-            "InterviewNo",
-            no
-        )
+                new Response(
+                    "InterviewNo",
+                    no
+                )
             },
-            AnswerQuestion
+            (
+                Farmer who,
+                string answer
+            ) =>
+            {
+                AnswerQuestion(
+                    morris,
+                    answer
+                );
+            }
         );
     }
 
     private static void AnswerQuestion(
-        Farmer who,
+        NPC morris,
         string answer
     )
     {
         switch (answer)
         {
             case "InterviewYes":
-                AcceptJob();
+                AcceptJob(
+                    morris
+                );
+
                 break;
 
             case "InterviewNo":
-                DeclineJob();
+                DeclineJob(
+                    morris
+                );
+
                 break;
         }
     }
 
-    private static void AcceptJob()
+    private static void AcceptJob(
+        NPC morris
+    )
     {
         PlayerData.State =
             PlayerState.Employee;
 
+        ShowDialogue(
+            morris,
+            "InterviewAccepted"
+        );
+
         MorrisIntroductionQuest.Complete();
     }
 
-    private static void DeclineJob()
+    private static void DeclineJob(
+        NPC morris
+    )
     {
-        // O jogador continua em InterviewAvailable.
+        ShowDialogue(
+            morris,
+            "InterviewDeclined"
+        );
+    }
+
+    private static void ShowDialogue(
+        NPC morris,
+        string dialogueKey
+    )
+    {
+        Dialogue? dialogue =
+            ModEntry.DialogueManager.CreateDialogue(
+                morris,
+                dialogueKey
+            );
+
+        if (dialogue is null)
+        {
+            return;
+        }
+
+        morris.CurrentDialogue.Clear();
+
+        morris.CurrentDialogue.Push(
+            dialogue
+        );
+
+        Game1.drawDialogue(
+            morris
+        );
     }
 }

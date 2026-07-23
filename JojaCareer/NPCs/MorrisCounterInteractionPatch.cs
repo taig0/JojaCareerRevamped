@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
+using JojaCareer.Data;
+using JojaCareer.Dialogues;
 using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.Locations;
 using xTile.Dimensions;
 
 namespace JojaCareer.Patches;
@@ -25,39 +26,40 @@ internal static class MorrisCounterInteractionPatch
         Farmer who
     )
     {
-        // Só queremos alterar a JojaMart
-        if (__instance.Name != JojaMartName)
+        if (
+            __instance.Name !=
+            JojaMartName
+        )
         {
             return true;
         }
 
-        // Procurar o Morris na JojaMart
         NPC? morris =
             Game1.getCharacterFromName(
                 MorrisId
             );
 
-        if (morris is null)
+        if (
+            morris is null
+        )
         {
             return true;
         }
 
-        /*
-         * O tile de interação é o tile imediatamente
-         * abaixo do Morris.
-         *
-         * Exemplo:
-         *
-         * Morris:  (14, 8)
-         * Balcão:  (14, 9)
-         */
         Vector2 interactionTile =
             morris.Tile +
-            new Vector2(0, 1);
+            new Vector2(
+                0,
+                1
+            );
 
-        // Verificar se o jogador clicou no tile do balcão
-        if (tileLocation.X != interactionTile.X ||
-            tileLocation.Y != interactionTile.Y)
+        if (
+            tileLocation.X !=
+            interactionTile.X
+            ||
+            tileLocation.Y !=
+            interactionTile.Y
+        )
         {
             return true;
         }
@@ -67,30 +69,73 @@ internal static class MorrisCounterInteractionPatch
             StardewModdingAPI.LogLevel.Info
         );
 
-        // Criar o diálogo
-        Dialogue dialogue =
+        switch (
+            PlayerData.State
+        )
+        {
+            case PlayerState.InterviewAvailable:
+
+                MorrisInterview.Start(
+                    morris
+                );
+
+                return false;
+
+            case PlayerState.Employee:
+
+                if (
+                    !PlayerData.IsOnShift
+                )
+                {
+                    MorrisShiftDialogue.Start(
+                        morris
+                    );
+
+                    return false;
+                }
+
+                ShowGreeting(
+                    morris
+                );
+
+                return false;
+
+            default:
+
+                return true;
+        }
+    }
+
+    private static void ShowGreeting(
+        NPC morris
+    )
+    {
+        Dialogue? dialogue =
             ModEntry.DialogueManager.CreateDialogue(
                 morris,
                 "Greeting"
             );
 
-        // Limpar diálogos anteriores
+        if (
+            dialogue is null
+        )
+        {
+            ModEntry.ModMonitor.Log(
+                "Could not create Morris dialogue.",
+                StardewModdingAPI.LogLevel.Error
+            );
+
+            return;
+        }
+
         morris.CurrentDialogue.Clear();
 
-        // Adicionar o novo diálogo
         morris.CurrentDialogue.Push(
             dialogue
         );
 
-        // Abrir a caixa de diálogo
         Game1.drawDialogue(
             morris
         );
-
-        /*
-         * Impedir que o jogo continue a processar
-         * a interação normal do tile.
-         */
-        return false;
     }
 }

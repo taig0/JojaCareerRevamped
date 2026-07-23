@@ -2,12 +2,15 @@
   "Greeting": "Olá! O que desejas?",
 
   "InterviewQuestion": "Queres trabalhar aqui?",
-
   "InterviewYes": "Sim",
-
   "InterviewNo": "Não",
 
   "InterviewAccepted": "Excelente decisão. Bem-vindo à Joja Corporation.",
+  "InterviewDeclined": "Compreendo. Se mudares de ideias, a oportunidade continuará disponível.",
 
-  "InterviewDeclined": "Compreendo. Se mudares de ideias, a oportunidade continuará disponível."
+  "ShiftStartQuestion": "Estás pronto para começar o teu shift?",
+  "ShiftStartYes": "Sim, estou pronto.",
+  "ShiftStartNo": "Ainda não.",
+
+  "ShiftStarted": "Muito bem. O teu shift começou. Veste o uniforme e dá o teu melhor."
 }
