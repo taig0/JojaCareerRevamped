@@ -1,0 +1,15 @@
+{
+  "Format": "2.9.0",
+  "Changes": [
+    {
+      "Action": "EditData",
+      "Target": "Data/Characters",
+      "Entries": {
+        "Morris": {
+          "IsVillager": true,
+          "CanSocialize": true
+        }
+      }
+    }
+  ]
+}
