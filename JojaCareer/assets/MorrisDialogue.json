@@ -1,3 +1,13 @@
 {
-  "Greeting": "Olá! Este é o diálogo personalizado do Morris."
+  "Greeting": "Olá! O que desejas?",
+
+  "InterviewQuestion": "Queres trabalhar aqui?",
+
+  "InterviewYes": "Sim",
+
+  "InterviewNo": "Não",
+
+  "InterviewAccepted": "Excelente decisão. Bem-vindo à Joja Corporation.",
+
+  "InterviewDeclined": "Compreendo. Se mudares de ideias, a oportunidade continuará disponível."
 }

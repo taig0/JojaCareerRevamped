@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using JojaCareer.Data;
+using StardewValley;
 using StardewValley.Quests;
 
 namespace JojaCareer.Quests;
@@ -11,15 +12,15 @@ internal static class MorrisIntroductionQuest
     public static void Start()
     {
         if (
-            Game1.player.questLog.Any(
-                quest =>
-                    quest.id.Value ==
-                    QuestId
-            )
+            PlayerData.State !=
+            PlayerState.None
         )
         {
             return;
         }
+
+        PlayerData.State =
+            PlayerState.InterviewAvailable;
 
         Quest quest =
             new Quest();
@@ -41,6 +42,30 @@ internal static class MorrisIntroductionQuest
             new HUDMessage(
                 "Nova missão: " +
                 quest.questTitle,
+                HUDMessage.newQuest_type
+            )
+        );
+    }
+
+    public static void Complete()
+    {
+        Quest? quest =
+            Game1.player.questLog.FirstOrDefault(
+                quest =>
+                    quest.id.Value ==
+                    QuestId
+            );
+
+        if (quest is not null)
+        {
+            Game1.player.questLog.Remove(
+                quest
+            );
+        }
+
+        Game1.addHUDMessage(
+            new HUDMessage(
+                "Missão concluída!",
                 HUDMessage.newQuest_type
             )
         );

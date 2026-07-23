@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using JojaCareer.Data;
+using JojaCareer.Dialogues;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -27,6 +29,19 @@ internal static class NPCInteractionPatch
             "Morris interaction detected!",
             LogLevel.Info
         );
+
+        if (
+            PlayerData.State ==
+            PlayerState.InterviewAvailable
+        )
+        {
+            MorrisInterview.Start(
+                __instance,
+                who
+            );
+
+            return false;
+        }
 
         Dialogue? dialogue =
             ModEntry.DialogueManager.CreateDialogue(

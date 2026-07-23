@@ -25,8 +25,7 @@ internal sealed class MorrisDialogueManager
             ?? new Dictionary<string, string>();
     }
 
-    public Dialogue? CreateDialogue(
-        NPC speaker,
+    public string? GetText(
         string dialogueKey
     )
     {
@@ -40,6 +39,22 @@ internal sealed class MorrisDialogueManager
                 LogLevel.Error
             );
 
+            return null;
+        }
+
+        return text;
+    }
+
+    public Dialogue? CreateDialogue(
+        NPC speaker,
+        string dialogueKey
+    )
+    {
+        string? text =
+            GetText(dialogueKey);
+
+        if (text is null)
+        {
             return null;
         }
 
